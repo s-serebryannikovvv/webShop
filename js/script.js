@@ -51,8 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	};
 
+	const accordion = () => {
+		characteristicsList
+		characteristicsItem
+	}
 
 
 
 	tabs();
+	accordion();
 });
