@@ -46,17 +46,51 @@ document.addEventListener('DOMContentLoaded', () => {
 					btn.classList.add('active');
 				}
 			});
-
 		});
-
 	};
 
 	const accordion = () => {
-		characteristicsList
-		characteristicsItem
-	}
+		const characteristicsListElem = document.querySelector('.characteristics__list');
+		const characteristicsItemElems = document.querySelectorAll('.characteristics__item');
 
+		characteristicsItemElems.forEach(elem => { // если нужна одна активная вкладка, то нужно сделать перебор  и у кого есть active, прописать height
+			if (elem.children[1].classList.contains('active')) {
+				elem.children[1].style.height = `${elem.children[1].scrollHeight}px`;
+			}
+		})
 
+		const open = (button, dropDown) => { //открытие аккордиона
+			closeAllDrops(button, dropDown); // закрытие всех других окон аккордиона
+			dropDown.style.height = `${dropDown.scrollHeight}px`; // управление высотой элемента
+			button.classList.add('active'); // добавление класса active
+			dropDown.classList.add('active');
+		};
+
+		const close = (button, dropDown) => {
+			button.classList.remove('active');
+			dropDown.classList.remove('active');
+			dropDown.style.height = '';
+		};
+
+		const closeAllDrops = (button, dropDown) => { // закрытие всех других окон аккордиона
+			characteristicsItemElems.forEach((elem) => { //получаем родителя и перебираем 
+				if (elem.children[0] !== button && elem.children[1] !== dropDown) {
+					close(elem.children[0], elem.children[1]);
+				}
+			});
+		}
+
+		characteristicsListElem.addEventListener('click', (event) => {
+			const target = event.target;
+			if (target.classList.contains('characteristics__title')) {
+				const parent = target.closest('.characteristics__item');
+				const description = parent.querySelector('.characteristics__description');
+				description.classList.contains('active') ?
+					close(target, description) :
+					open(target, description);
+			}
+		});
+	};
 
 	tabs();
 	accordion();
