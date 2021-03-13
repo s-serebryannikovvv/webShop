@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		const closeAllDrops = (button, dropDown) => { // закрытие всех других окон аккордиона
 			characteristicsItemElems.forEach((elem) => { //получаем родителя и перебираем 
-				if (elem.children[0] !== button && elem.children[1] !== dropDown) {
+				if (elem.children[0] !== button) {
 					close(elem.children[0], elem.children[1]);
 				}
 			});
@@ -90,8 +90,60 @@ document.addEventListener('DOMContentLoaded', () => {
 					open(target, description);
 			}
 		});
+		document.body.addEventListener('click', (event) => { //при клике вне акардиона, закрыть открытые вкладки
+			const target = event.target;
+			console.log(event.target);
+
+			if (!target.closest('.characteristics__list')) {
+				closeAllDrops();
+			}
+		})
+
 	};
+
+	const modal = () => {
+		const cardDetailsButtonBuy = document.querySelector('.card-details__button_buy');
+		const cardDetailsButtonDelivery = document.querySelector('.card-details__button_delivery');
+		const modal = document.querySelector('.modal');
+		const modalClose = modal.querySelector('.modal__close');
+		const cardDetailsTitle = document.querySelector('.card-details__title');
+		const modalTitle = document.querySelector('.modal__title');
+		const modalSubtitle = document.querySelector('.modal__subtitle');
+
+		const openModal = () => { // открытие модального окна
+			modal.classList.add('open');
+			document.addEventListener('keydown', escapeHandler); //вызов функции по закрытию модального окна по Escape
+
+		};
+
+		const closeModal = () => {
+			modal.classList.remove('open');
+			document.removeEventListener('keydown', escapeHandler) //удаляем обработчик события
+		};
+
+
+
+		const escapeHandler = event => { //закрытие модального окна по кнопке Escape 
+			if (event.code === 'Escape') {
+				closeModal();
+			};
+		};
+		// modalClose.addEventListener('click', () => { //закрытие окна первый вариант
+		// 	modal.classList.remove('open');
+		// });
+
+		modal.addEventListener('click', (event) => { //закрытие вторым вариантом
+			const target = event.target;
+			if (target.classList.contains('modal__close') || target === modal) { //закрытие модального окна по кнопке X и вне окна
+				closeModal();
+			}
+		});
+		cardDetailsButtonBuy.addEventListener('click', openModal)
+
+
+	}
 
 	tabs();
 	accordion();
+	modal();
 });
